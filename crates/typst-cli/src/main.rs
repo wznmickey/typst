@@ -43,7 +43,6 @@ static ARGS: LazyLock<CliArguments> = LazyLock::new(|| {
 
 /// Entry point.
 fn main() -> ExitCode {
-
     let res = dispatch();
 
     if let Err(msg) = res {
