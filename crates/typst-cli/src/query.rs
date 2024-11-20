@@ -12,7 +12,7 @@ use crate::args::{QueryCommand, SerializationFormat};
 use crate::compile::print_diagnostics;
 use crate::set_failed;
 use crate::world::SystemWorld;
-
+use std::io::Write;
 /// Execute a query command.
 pub fn query(command: &QueryCommand) -> HintedStrResult<()> {
     let mut world = SystemWorld::new(&command.common)?;
@@ -28,7 +28,8 @@ pub fn query(command: &QueryCommand) -> HintedStrResult<()> {
         Ok(document) => {
             let data = retrieve(&world, command, &document)?;
             let serialized = format(data, command)?;
-            println!("{serialized}");
+            let mut out = crate::terminal::out();
+            writeln!(out, "{serialized}").unwrap();
             print_diagnostics(&world, &[], &warnings, command.common.diagnostic_format)
                 .map_err(|err| eco_format!("failed to print diagnostics ({err})"))?;
         }

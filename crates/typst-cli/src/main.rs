@@ -43,9 +43,6 @@ static ARGS: LazyLock<CliArguments> = LazyLock::new(|| {
 
 /// Entry point.
 fn main() -> ExitCode {
-    // Handle SIGPIPE
-    // https://stackoverflow.com/questions/65755853/simple-word-count-rust-program-outputs-valid-stdout-but-panicks-when-piped-to-he/65760807
-    sigpipe::reset();
 
     let res = dispatch();
 
