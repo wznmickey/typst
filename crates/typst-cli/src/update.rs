@@ -49,10 +49,12 @@ pub fn update(command: &UpdateCommand) -> StrResult<()> {
         let current_tag = env!("CARGO_PKG_VERSION").parse().unwrap();
 
         if version < &Version::new(0, 8, 0) {
-            eprintln!(
+            writeln!(
+                std::io::stderr(),
                 "note: versions older than 0.8.0 will not have \
                  the update command available."
-            );
+            )
+            .unwrap();
         }
 
         if !command.force && version < &current_tag {
@@ -95,7 +97,7 @@ pub fn update(command: &UpdateCommand) -> StrResult<()> {
 
     let release = Release::from_tag(command.version.as_ref(), &downloader)?;
     if !update_needed(&release)? && !command.force {
-        eprintln!("Already up-to-date.");
+        writeln!(std::io::stderr(), "Already up-to-date.").unwrap();
         return Ok(());
     }
 

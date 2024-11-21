@@ -1,5 +1,5 @@
+use std::io::Write;
 use std::io::{self, Read};
-
 /// This is shown to users who just type `typst` the first time.
 #[rustfmt::skip]
 const GREETING: &str = color_print::cstr!("\
@@ -60,7 +60,7 @@ fn print_and_exit(message: &'static str) -> ! {
 /// Waits for the user.
 #[allow(clippy::unused_io_amount)]
 fn pause() {
-    eprintln!();
-    eprintln!("Press enter to continue...");
+    writeln!(io::stderr()).unwrap();
+    writeln!(io::stderr(), "Press enter to continue...").unwrap();
     io::stdin().lock().read(&mut [0]).unwrap();
 }
