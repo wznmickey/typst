@@ -9,7 +9,6 @@ pub fn fonts(command: &FontsCommand) -> StrResult<()> {
     let fonts = Fonts::searcher()
         .include_system_fonts(!command.font_args.ignore_system_fonts)
         .search_with(&command.font_args.font_paths);
-    println!("Ta");
     let mut out = io::stdout();
     for (name, infos) in fonts.book.families() {
         writeln!(out, "{name}:")
