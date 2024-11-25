@@ -1,15 +1,17 @@
-use crate::args::FontsCommand;
+use std::io::Write;
+
 use ecow::eco_format;
-use std::io::{self, Write};
 use typst::{diag::StrResult, text::FontVariant};
 use typst_kit::fonts::Fonts;
+
+use crate::args::FontsCommand;
 
 /// Execute a font listing command.
 pub fn fonts(command: &FontsCommand) -> StrResult<()> {
     let fonts = Fonts::searcher()
         .include_system_fonts(!command.font_args.ignore_system_fonts)
         .search_with(&command.font_args.font_paths);
-    let mut out = io::stdout();
+    let mut out = std::io::stdout();
     for (name, infos) in fonts.book.families() {
         writeln!(out, "{name}:")
             .map_err(|err| eco_format!("failed to print fonts ({err})"))?;

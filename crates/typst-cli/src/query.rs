@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use comemo::Track;
 use ecow::{eco_format, EcoString};
 use serde::Serialize;
@@ -12,7 +14,7 @@ use crate::args::{QueryCommand, SerializationFormat};
 use crate::compile::print_diagnostics;
 use crate::set_failed;
 use crate::world::SystemWorld;
-use std::io::{self, Write};
+
 /// Execute a query command.
 pub fn query(command: &QueryCommand) -> HintedStrResult<()> {
     let mut world = SystemWorld::new(&command.common)?;
@@ -28,7 +30,7 @@ pub fn query(command: &QueryCommand) -> HintedStrResult<()> {
         Ok(document) => {
             let data = retrieve(&world, command, &document)?;
             let serialized = format(data, command)?;
-            let mut out = io::stdout();
+            let mut out = std::io::stdout();
             writeln!(out, "{serialized}")
                 .map_err(|err| eco_format!("failed to print query ({err})"))?;
             print_diagnostics(&world, &[], &warnings, command.common.diagnostic_format)
